@@ -21,11 +21,10 @@ class Calculator {
     this.sumXTimesY = 0
   }
 
-  inputData(arrayStrings) {
-    console.log(arrayStrings, this.arrayDataset)
-    let arrayNumbers = arrayStrings.split("\r\n").map(Number)
+  inputData(arrayNumbers) {
+    // console.log(arrayStrings, this.arrayDataset)
     this.arrayDataset.push(arrayNumbers)
-    console.log(this.arrayDataset)
+    // console.log(this.arrayDataset)
   }
 
   hasTheSameInputLength() {

@@ -15,7 +15,7 @@ let viewModel = new Vue({
       if (this.myFileInput) this.myFileInput.value = ""
       this.myFileInput = null
     },
-    inputFiles: function(event) {
+    inputFiles: async function(event) {
       this.setup()
       this.myFileInput = event.target
       let filesInputed = this.myFileInput.files
@@ -25,20 +25,27 @@ let viewModel = new Vue({
         this.setup()
         return
       } else {
-        for (let aFile of filesInputed) {
-          let fileReader = new FileReader()
-          fileReader.onload = this.processFile
-          fileReader.readAsText(aFile)
+        for (let file of filesInputed) {
+          let arrayNumbers = await this.readUploadFileAsNumber(file)
+          this.calculator.inputData(arrayNumbers)
         }
+        this.calculateCorrelation()
       }
     },
-    aPromise: function(){
-      
-    }
-    ,
-    processFile: function(event) {
-      let arrayStrings = event.target.result
-      this.calculator.inputData(arrayStrings)
+
+    readUploadFileAsNumber: function(aFile) {
+      return new Promise((resolve, reject) => {
+        let fileReader = new FileReader()
+        fileReader.onerror = () => {
+          fileReader.abort()
+          reject(new DOMException("Problem parsing input file."))
+        }
+        fileReader.onload = () => {
+          let arrayNumbers = event.target.result.split("\r\n").map(Number)
+          resolve(arrayNumbers)
+        }
+        fileReader.readAsText(aFile)
+      })
     },
     calculateCorrelation: function() {
       if (!this.calculator.hasTheSameInputLength()) {
