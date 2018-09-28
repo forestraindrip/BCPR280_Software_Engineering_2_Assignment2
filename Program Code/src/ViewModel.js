@@ -10,6 +10,7 @@ let viewModel = new Vue({
     setup: function() {
       this.calculator = new Calculator()
       this.calculator.setup()
+      this.dataSet = null
       this.correlation = null
       if (this.myFileInput) this.myFileInput.value = ""
       this.myFileInput = null
