@@ -21,8 +21,10 @@ class Calculator {
     this.sumXTimesY = 0
   }
 
-  inputData(arrayNumbers) {
-   this.arrayDataset.push(arrayNumbers)
+  inputData(arrayStrings) {
+    console.log(arrayStrings, this.arrayDataset)
+    let arrayNumbers = arrayStrings.split("\r\n").map(Number)
+    this.arrayDataset.push(arrayNumbers)
     console.log(this.arrayDataset)
   }
 

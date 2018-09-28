@@ -9,7 +9,6 @@ let viewModel = new Vue({
   methods: {
     setup: function() {
       this.calculator = new Calculator()
-      this.dataSet =null
       this.calculator.setup()
       this.correlation = null
       if (this.myFileInput) this.myFileInput.value = ""
@@ -25,38 +24,20 @@ let viewModel = new Vue({
         this.setup()
         return
       } else {
-        let promise1 = new Promise(() => this.processFile(filesInputed[0]))
-        let promise2 = new Promise(() => this.processFile(filesInputed[1]))
-
-        Promise.all([promise1, promise2])
-          .then(value => console.log(value))
-          .catch(error => console.log(error))
-      }
-      /* {
         for (let aFile of filesInputed) {
           let fileReader = new FileReader()
           fileReader.onload = this.processFile
           fileReader.readAsText(aFile)
         }
-      } */
+      }
     },
-    processFile: function(aFile) {
-      // console.log(aFile)
-      return new Promise((resolve, reject) => {
-        let fileReader = new FileReader()
-
-        fileReader.onload = () => {
-          let arrayStrings = event.target.result
-          let arrayNumbers = arrayStrings.split("\r\n").map(Number)
-          this.calculator.inputData(arrayNumbers)
-          resolve(arrayNumbers)
-        }
-        fileReader.readAsText(aFile)
-      })
-
-      // let arrayStrings = event.target.result
-      // let arrayNumbers = arrayStrings.split("\r\n").map(Number)
-      // this.calculator.inputData(arrayNumbers)
+    aPromise: function(){
+      
+    }
+    ,
+    processFile: function(event) {
+      let arrayStrings = event.target.result
+      this.calculator.inputData(arrayStrings)
     },
     calculateCorrelation: function() {
       if (!this.calculator.hasTheSameInputLength()) {
