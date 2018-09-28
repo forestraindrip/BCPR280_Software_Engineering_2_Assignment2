@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Calculator</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="./src/Calculator.js"></script>
+  <!-- <script src="./src/ViewModel.js"></script> -->
+
+</head>
+
+<body>
+  <div id="divCalculator">
+    <input id="fileInput" type='file' @change='inputFiles' multiple>
+    <br>
+    <input type="button" v-if="myFileInput" @click="calculateCorrelation" value='Calculate Correction'>
+    <p>{{correlation}}</p>
+    <input type="button" @click="setup" value='Reset'>
+    <table>
+      <tr>
+        <th>X</th>
+        <th>Y</th>
+      </tr>
+      <tr v-for="(array,index) in dataSet">
+        <td v-for="(number,index) in array">{{number}}</td>
+      </tr>
+    </table>
+  </div>
+  <script src="src/ViewModel.js"></script>
+  <script>
+    viewModel.setup()
+  </script>
+</body>
+
+</html>
