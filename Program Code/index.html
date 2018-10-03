@@ -5,7 +5,7 @@
   <title>Calculator</title>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="./src/Calculator.js"></script>
-  <!-- <script src="./src/ViewModel.js"></script> -->
+  <script src="./src/Dataset.js"></script>
 
 </head>
 
@@ -13,18 +13,28 @@
   <div id="divCalculator">
     <input id="fileInput" type='file' @change='inputFiles' multiple>
     <br>
-    <input type="button" v-if="myFileInput" @click="calculateCorrelation" value='Calculate Correction'>
-    <p>{{correlation}}</p>
+    <p v-if="correlation">Correlation is: {{correlation}}</p>
+    <p v-if="coefficientOfDetermination">Coefficient Of Determination is: {{coefficientOfDetermination}}</p>
+    <br>
     <input type="button" @click="setup" value='Reset'>
-    <table>
-      <tr>
-        <th>X</th>
-        <th>Y</th>
-      </tr>
-      <tr v-for="(array,index) in dataSet">
-        <td v-for="(number,index) in array">{{number}}</td>
-      </tr>
-    </table>
+    <div>
+      <table>
+        <tr>
+          <th>X</th>
+        </tr>
+        <tr v-for="(number,index) in arrayNumberFirst">
+          <td>{{number}}</td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <th>Y</th>
+        </tr>
+        <tr v-for="(number,index) in arrayNumberSecond">
+          <td>{{number}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
   <script src="src/ViewModel.js"></script>
   <script>

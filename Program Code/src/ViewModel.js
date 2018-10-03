@@ -2,16 +2,20 @@ let viewModel = new Vue({
   el: "#divCalculator",
   data: {
     calculator: Calculator,
-    dataSet: null,
+    arrayNumberFirst: null,
+    arrayNumberSecond: null,
     correlation: null,
+    coefficientOfDetermination: null,
     myFileInput: null
   },
   methods: {
     setup: function() {
       this.calculator = new Calculator()
       this.calculator.setup()
-      this.dataSet = null
+      this.arrayNumberFirst = null
+      this.arrayNumberSecond = null
       this.correlation = null
+      this.coefficientOfDetermination = null
       if (this.myFileInput) this.myFileInput.value = ""
       this.myFileInput = null
     },
@@ -26,14 +30,19 @@ let viewModel = new Vue({
         return
       } else {
         for (let file of filesInputed) {
-          let arrayNumbers = await this.readUploadFileAsNumber(file)
-          this.calculator.inputData(arrayNumbers)
+          let aDataset = await this.decryptUploadFile(file)
+          this.calculator.inputDataset(aDataset)
         }
-        this.calculateCorrelation()
+        if (!this.calculator.hasTheSameInputLength()) {
+          alert("Please make sure both files have the same data length")
+          this.setup()
+          return
+        }
+        this.startCalculation()
       }
     },
 
-    readUploadFileAsNumber: function(aFile) {
+    decryptUploadFile: function(aFile) {
       return new Promise((resolve, reject) => {
         let fileReader = new FileReader()
         fileReader.onerror = () => {
@@ -42,20 +51,20 @@ let viewModel = new Vue({
         }
         fileReader.onload = () => {
           let arrayNumbers = event.target.result.split("\r\n").map(Number)
-          resolve(arrayNumbers)
+          let aDataset = new Dataset(arrayNumbers)
+          resolve(aDataset)
         }
         fileReader.readAsText(aFile)
       })
     },
-    calculateCorrelation: function() {
-      if (!this.calculator.hasTheSameInputLength()) {
-        alert("Please make sure both files have the same data length")
-        this.setup()
-        return
-      } else {
-        this.dataSet = this.calculator.arrayDataset
+    startCalculation: function() {
+      {
+        this.arrayNumberFirst = this.calculator.arrayDataset[0].arrayNumbers
+        this.arrayNumberSecond = this.calculator.arrayDataset[1].arrayNumbers
 
-        this.correlation = this.calculator.calculateCorrelation()
+        this.calculator.startCalculation()
+        this.correlation = this.calculator.correlation
+        this.coefficientOfDetermination = this.calculator.coefficientOfDetermination
       }
     },
 
