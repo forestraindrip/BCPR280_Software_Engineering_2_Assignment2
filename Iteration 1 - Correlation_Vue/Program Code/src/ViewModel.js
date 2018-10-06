@@ -30,8 +30,8 @@ let viewModel = new Vue({
         return
       } else {
         for (let file of filesInputed) {
-          let aDataset = await this.decryptUploadFile(file)
-          this.calculator.inputDataset(aDataset)
+          let arrayNumbers = await this.decryptUploadFile(file)
+          this.calculator.inputArrayNumbers(arrayNumbers)
         }
         if (!this.calculator.hasTheSameInputLength()) {
           alert("Please make sure both files have the same data length")
@@ -51,8 +51,7 @@ let viewModel = new Vue({
         }
         fileReader.onload = () => {
           let arrayNumbers = event.target.result.split("\r\n").map(Number)
-          let aDataset = new Dataset(arrayNumbers)
-          resolve(aDataset)
+          resolve(arrayNumbers)
         }
         fileReader.readAsText(aFile)
       })
@@ -68,6 +67,7 @@ let viewModel = new Vue({
       }
     },
 
-    getRegression: function() {}
+    getRegression: function() {},
+    generateArrayDataForTable: function(){}
   }
 })

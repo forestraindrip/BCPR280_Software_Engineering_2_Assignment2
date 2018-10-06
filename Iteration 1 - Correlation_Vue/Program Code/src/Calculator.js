@@ -15,8 +15,8 @@ class Calculator {
     this.coefficientOfDetermination = 0 // r*r
   }
 
-  inputDataset(aDataset) {
-    // console.log(arrayStrings, this.arrayDataset)
+  inputArrayNumbers(arrayNumbers) {
+    let aDataset = new Dataset(arrayNumbers)
     this.arrayDataset.push(aDataset)
     // console.log(this.arrayDataset)
   }
@@ -92,4 +92,5 @@ class Calculator {
   examineRelationship() {}
 
   calculateRegression() {}
+
 }
