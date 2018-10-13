@@ -2,32 +2,46 @@ let viewModel = new Vue({
   el: "#divCalculator",
   data: {
     calculator: Calculator,
-    arrayNumberFirst: null,
-    arrayNumberSecond: null,
-    correlation: null,
-    coefficientOfDetermination: null,
+    arrayNumberFirst: [],
+    arrayNumberSecond: [],
+    correlation: 0,
+    coefficientOfDetermination: 0,
     myFileInput: null,
-    xBeta0: 0,
-    xBeta1: 0,
-    yBeta0: 0,
-    yBeta1: 0,
-    arrayTableData: []
+    sumX: null,
+    sumY: null,
+    sumSquaredX: null,
+    sumSquaredY: null,
+    sumXTimesY: null,
+    beta0X: null,
+    beta1X: null,
+    beta0Y: null,
+    beta1Y: null,
+    averageX: null,
+    averageY: null,
+    arrayTableData: null
   },
   methods: {
     setup: function() {
       this.calculator = new Calculator()
       this.calculator.setup()
-      this.arrayNumberFirst = null
-      this.arrayNumberSecond = null
-      this.correlation = null
-      this.coefficientOfDetermination = null
+      this.arrayNumberFirst = []
+      this.arrayNumberSecond = []
+      this.correlation = 0
+      this.coefficientOfDetermination = 0
       if (this.myFileInput) this.myFileInput.value = ""
       this.myFileInput = null
-      this.xBeta0 = 0
-      this.xBeta1 = 0
-      this.yBeta0 = 0
-      this.yBeta1 = 0
-      this.arrayTableData = []
+      this.sumX = null
+      this.sumY = null
+      this.sumSquaredX= null
+      this.sumSquaredY= null
+      this.sumXTimesY= null
+      this.beta0X= null
+      this.beta1X= null
+      this.beta0Y= null
+      this.beta1Y= null
+      this.averageX= null
+      this.averageY = null
+      this.arrayTableData = null
     },
     inputFiles: async function(event) {
       this.setup()
@@ -73,17 +87,43 @@ let viewModel = new Vue({
 
         this.calculator.startCalculation()
         this.updateValues()
+        this.generateArrayTableData()
       }
     },
 
     updateValues: function() {
+      let xData = this.calculator.arrayDataset[0]
+      let yData = this.calculator.arrayDataset[1]
       this.correlation = this.calculator.correlation
       this.coefficientOfDetermination = this.calculator.coefficientOfDetermination
-      this.xBeta0 = this.calculator.arrayRegressionX[0]
-      this.xBeta1 = this.calculator.arrayRegressionX[1]
-      this.yBeta0 = this.calculator.arrayRegressionY[0]
-      this.yBeta1 = this.calculator.arrayRegressionY[1]
+      this.beta0X = this.calculator.arrayRegressionX[0]
+      this.beta1X = this.calculator.arrayRegressionX[1]
+      this.beta0Y = this.calculator.arrayRegressionY[0]
+      this.beta1Y = this.calculator.arrayRegressionY[1]
+      this.sumX = xData.sum
+      this.sumY = yData.sum
+      this.sumXTimesY =this.calculator.sumXTimesY
+      this.sumSquaredX = xData.sumSquared
+      this.sumSquaredY = yData.sumSquared
+      this.averageX = this.calculator.averageX
+      this.averageY = this.calculator.averageY
     },
-    generateArrayTableData: function() {}
+    generateArrayTableData: function() {
+      let aTable = []
+      let xData = this.calculator.arrayDataset[0]
+      let yData = this.calculator.arrayDataset[1]
+      for(let n=0;n< xData.length;n++){
+        let aRow = {
+          x : xData.arrayNumbers[n],
+          y : yData.arrayNumbers[n],
+          xSquare : xData.arrayNumberSquared[n],
+          ySquare: yData.arrayNumberSquared[n],
+          xTimesY: this.calculator.arrayXTimesY[n]
+        }
+        aTable.push(aRow)
+      }
+
+      this.arrayTableData = aTable
+    }
   }
 })

@@ -7,6 +7,8 @@ class Calculator {
     this.coefficientOfDetermination = 0 // r*r
     this.arrayRegressionX = []
     this.arrayRegressionY = []
+    this.averageX = 0
+    this.averageY = 0
   }
 
   setup() {
@@ -17,6 +19,8 @@ class Calculator {
     this.coefficientOfDetermination = 0 // r*r
     this.arrayRegressionX = []
     this.arrayRegressionY = []
+    this.averageX = 0
+    this.averageY = 0
   }
 
   inputArrayNumbers(arrayNumbers) {
@@ -65,13 +69,12 @@ class Calculator {
     return average
   }
 
-  calculateRegression(XDataset, YDataset) {
+  calculateRegression(XDataset) {
     let length = XDataset.length
-    let averageX = this.calculateAverage(XDataset)
-    let averageY = this.calculateAverage(YDataset)
-    let b = (this.sumXTimesY - length *averageX * averageY) / 
-                     (XDataset.sumSquared - length * (averageX**2))
-    let a = averageY - b * averageX
+
+    let b = (this.sumXTimesY - length *this.averageX * this.averageY) / 
+                     (XDataset.sumSquared - length * (this.averageX**2))
+    let a = this.averageY - b * this.averageX
     let arrayRegression = [a,b]
     return arrayRegression
   }
@@ -110,9 +113,11 @@ class Calculator {
     this.correlation = this.calculateCorrelation(XDataset, YDataset)
     this.coefficientOfDetermination = this.correlation ** 2
     console.log("correlation:"+ this.correlation)
-    this.arrayRegressionX =  this.calculateRegression(XDataset,YDataset)
+    this.averageX = this.calculateAverage(XDataset)
+    this.averageY = this.calculateAverage(YDataset)
+    this.arrayRegressionX =  this.calculateRegression(XDataset)
     console.log("X reg: " + this.arrayRegressionX)
-    this.arrayRegressionY =  this.calculateRegression(YDataset,XDataset)
+    this.arrayRegressionY =  this.calculateRegression(YDataset)
     console.log("Y reg: " + this.arrayRegressionY)
   }
   examineRelationship() {}
