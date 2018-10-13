@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Calculator</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="./src/Calculator.js"></script>
+  <script src="./src/Dataset.js"></script>
+
+</head>
+
+<body>
+  <div id="divCalculator">
+    <input id="fileInput" type='file' @change='inputFiles' multiple>
+    <br>
+    <p v-if="correlation">Correlation is: {{correlation}}</p>
+    <p v-if="coefficientOfDetermination">Coefficient Of Determination is: {{coefficientOfDetermination}}</p>
+    <br>
+    <input type="button" @click="setup" value='Reset'>
+    <div>
+      <table>
+        <tr>
+          <th>X</th>
+        </tr>
+        <tr v-for="(number,index) in arrayNumberFirst">
+          <td>{{number}}</td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <th>Y</th>
+        </tr>
+        <tr v-for="(number,index) in arrayNumberSecond">
+          <td>{{number}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <script src="src/ViewModel.js"></script>
+  <script>
+    viewModel.setup()
+  </script>
+</body>
+
+</html>
