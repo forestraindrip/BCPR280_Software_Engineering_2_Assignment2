@@ -20,53 +20,40 @@ function floorNumber(anNumber, digit) {
   return Math.floor(anNumber * 10 ** digit) / 10 ** digit
 }
 /************************************************************/
-describe("Calculator", function () {
+describe("Calculator", function() {
   var calculator
-  beforeEach(function () {
+  beforeEach(function() {
     calculator = new Calculator()
   })
-  it("should have arrayDataset", function () {
-    expect(calculator.hasOwnProperty("arrayDataset")).toBeTruthy()
+  it("should have arrayData", function() {
+    expect(calculator.hasOwnProperty("arrayData")).toBeTruthy()
   })
-  it("should have arrayXTimesY", function () {
+  it("should have arrayXTimesY", function() {
     expect(calculator.hasOwnProperty("arrayXTimesY")).toBeTruthy()
   })
-  it("should have sumXTimesY", function () {
+  it("should have sumXTimesY", function() {
     expect(calculator.hasOwnProperty("sumXTimesY")).toBeTruthy()
   })
-  it("should have correlation", function () {
+  it("should have correlation", function() {
     expect(calculator.hasOwnProperty("correlation")).toBeTruthy()
   })
-  it("should have coefficientOfDetermination", function () {
+  it("should have coefficientOfDetermination", function() {
     expect(calculator.hasOwnProperty("coefficientOfDetermination")).toBeTruthy()
   })
-  it("should have arrayRegressionX", function () {
-    expect(calculator.hasOwnProperty("arrayRegressionX")).toBeTruthy()
-  })
-  it("should have arrayRegressionY", function () {
-    expect(calculator.hasOwnProperty("arrayRegressionY")).toBeTruthy()
-  })
-  it("should have averageX", function () {
-    expect(calculator.hasOwnProperty("averageX")).toBeTruthy()
-  })
-  it("should have averageY", function () {
-    expect(calculator.hasOwnProperty("averageY")).toBeTruthy()
-  })
-  describe("calculator.setup()", function () {
-    it("should reset values", function () {
+
+  describe("calculator.setup()", function() {
+    it("should reset values", function() {
       // debugger
       calculator.setup()
+      expect(calculator.arrayData).toEqual([])
+      expect(calculator.arrayXTimesY).toEqual([])
       expect(calculator.sumXTimesY).toEqual(0)
       expect(calculator.correlation).toEqual(0)
       expect(calculator.coefficientOfDetermination).toEqual(0)
-      expect(calculator.arrayRegressionX).toEqual([])
-      expect(calculator.arrayRegressionY).toEqual([])
-      expect(calculator.averageX).toEqual(0)
-      expect(calculator.averageY).toEqual(0)
     })
   })
-  describe("calculator.inputArrayNumbers()", function () {
-    it("should input array of numbers", function () {
+  describe("calculator.inputArrayNumbers()", function() {
+    it("should input array of numbers", function() {
       let lengthArray = generateRandomInteger(1, 100)
       let arrayInput = generateArrayOfNumbers(lengthArray)
 
@@ -76,12 +63,12 @@ describe("Calculator", function () {
       }
       // examine correctness
       for (let j = 0; j < lengthArray; j++) {
-        expect(calculator.arrayDataset[j].arrayNumbers).toEqual(arrayInput[j])
+        expect(calculator.arrayData[j].arrayNumbers).toEqual(arrayInput[j])
       }
     })
   })
-  describe("calculator.hasTheSameInputLength()", function () {
-    it("should compare the lengths of two arrays", function () {
+  describe("calculator.hasTheSameInputLength()", function() {
+    it("should compare the lengths of two arrays", function() {
       let length = generateRandomInteger(0, 50)
       let arrayX = generateArrayOfNumbers(length)
       length = generateRandomInteger(51, 100)
@@ -93,8 +80,8 @@ describe("Calculator", function () {
       expect(isTheSameLength === false).toBeTruthy()
     })
   })
-  describe("calculator.calculateSum() ", function () {
-    it("should return the sum of an array", function () {
+  describe("calculator.calculateSum() ", function() {
+    it("should return the sum of an array", function() {
       let length = generateRandomInteger(1, 100)
       let anArrayInput = generateArrayOfNumbers(length)
       for (let i = 0; i < anArrayInput.length; i++) {
@@ -107,8 +94,8 @@ describe("Calculator", function () {
       }
     })
   })
-  describe("calculator.calculateNumberSquared()", function () {
-    it("should return an array of numbers sqared ", function () {
+  describe("calculator.calculateNumberSquared()", function() {
+    it("should return an array of numbers sqared ", function() {
       let length = generateRandomInteger(1, 100)
       let anArrayInput = generateArrayOfNumbers(length)
       for (let i = 0; i < anArrayInput.length; i++) {
@@ -119,8 +106,8 @@ describe("Calculator", function () {
       }
     })
   })
-  describe("calculator.calculateAverage()", function () {
-    it("should return average of an array", function () {
+  describe("calculator.calculateAverage()", function() {
+    it("should return average of an array", function() {
       let length = generateRandomInteger(1, 100)
       let anArrayInput = generateArrayOfNumbers(length)
 
@@ -131,47 +118,49 @@ describe("Calculator", function () {
         anInput.map(num => (sum += num))
         let answer = sum / anInput.length
 
-        let aDataset = new Dataset(anInput)
-        let average = calculator.calculateAverage(aDataset)
+        let data = {
+          arrayNumbers: anInput,
+          arrayNumberSquared: [],
+          length: anInput.length,
+          sum: 0,
+          sumSquared: 0
+        }
+        let average = calculator.calculateAverage(data)
         // debugger
         expect(average).toEqual(answer)
       }
     })
   })
 
-  describe("calculator.startCalculation（）", function () {
-    let arrayX = [160, 591, 114, 229, 230, 270, 128, 1657, 624, 1503]
+  describe("calculator.startCalculation（）", function() {
+    let arrayX = [130, 650, 99, 150, 128, 302, 95, 945, 368, 961]
     let arrayY = [186, 699, 132, 272, 291, 331, 199, 1890, 788, 1601]
 
     let calculator = new Calculator()
     calculator.inputArrayNumbers(arrayX)
     calculator.inputArrayNumbers(arrayY)
     calculator.startCalculation()
-    // TODO:
-    describe("calculator.calculateCorrelation()", function () {
-      it("should return correlation", function () {
-        let answer = 0.9978340665
-        let correlation = floorNumber(calculator.correlation, 10)
+    describe("calculator.calculateCorrelation()", function() {
+      it("should return correlation", function() {
+        let answer = 0.95449
+        let correlation = floorNumber(calculator.correlation, 5)
         expect(correlation).toEqual(answer)
       })
     })
 
-    // TODO:
-    describe("calculator.calculateRegression()", function () {
-      it("should return regression of two arrays", function () {
-        let ansBetaX = [38.0051906115, 1.0913454583]
-        let ansBetaY = [251.9417670907, 0.7027937393]
-
-        let beta0X = floorNumber(calculator.arrayRegressionX[0], 10)
-        let beta1X = floorNumber(calculator.arrayRegressionX[1], 10)
-        let beta0Y = floorNumber(calculator.arrayRegressionY[0], 10)
-        let beta1Y = floorNumber(calculator.arrayRegressionY[1], 10)
-
+    describe("calculator.calculateRegression()", function() {
+      let ansBetaX = [-22.55254, 1.72793]
+      let ansBetaY = [45.93578, 0.52725]
+      // debugger
+      let beta0X = floorNumber(calculator.arrayData[0].beta0, 5)
+      let beta1X = floorNumber(calculator.arrayData[0].beta1, 5)
+      let beta0Y = floorNumber(calculator.arrayData[1].beta0, 5)
+      let beta1Y = floorNumber(calculator.arrayData[1].beta1, 5)
+      it("should return regression beta0, beta1 of X and Y", function() {
         expect([beta0X, beta1X]).toEqual(ansBetaX)
         expect([beta0Y, beta1Y]).toEqual(ansBetaY)
       })
     })
-
   })
 
   /*

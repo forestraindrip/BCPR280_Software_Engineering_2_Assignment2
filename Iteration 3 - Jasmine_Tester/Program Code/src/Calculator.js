@@ -1,42 +1,45 @@
 class Calculator {
   constructor() {
-    this.arrayDataset = []
+    this.arrayData = []
     this.arrayXTimesY = []
     this.sumXTimesY = 0
     this.correlation = 0 //r
     this.coefficientOfDetermination = 0 // r*r
-    this.arrayRegressionX = []
-    this.arrayRegressionY = []
-    this.averageX = 0
-    this.averageY = 0
   }
 
   setup() {
-    this.arrayDataset = []
+    this.arrayData = []
     this.arrayXTimesY = []
     this.sumXTimesY = 0
     this.correlation = 0 //r
     this.coefficientOfDetermination = 0 // r*r
-    this.arrayRegressionX = []
-    this.arrayRegressionY = []
-    this.averageX = 0
-    this.averageY = 0
   }
 
   inputArrayNumbers(arrayNumbers) {
-    let aDataset = new Dataset(arrayNumbers)
-    this.arrayDataset.push(aDataset)
-    // console.log(this.arrayDataset)
+    let data = {
+      arrayNumbers: arrayNumbers,
+      // console.log( this.arrayNumbers)
+      arrayNumberSquared: [],
+      length: arrayNumbers.length,
+      sum: null,
+      sumSquared: null,
+      average: null,
+      beta0: null,
+      beta1: null
+    }
+
+    this.arrayData.push(data)
+    // console.log(this.arrayData)
   }
 
   hasTheSameInputLength() {
-    return this.arrayDataset[0].length === this.arrayDataset[1].length
+    return this.arrayData[0].length === this.arrayData[1].length
   }
 
   calculateSum(anArray) {
     // console.log("anArray", anArray)
     let sum = 0
-    anArray.map(n => sum += n)
+    anArray.map(n => (sum += n))
     return sum
   }
 
@@ -47,76 +50,76 @@ class Calculator {
     return arrayNumberSquared
   }
 
-  calculateCorrelation(XDataset, YDataset) {
-    let length = XDataset.length
+  calculateCorrelation(XData, YData) {
+    let length = XData.length
 
     let correlation =
-      (length * this.sumXTimesY - XDataset.sum * YDataset.sum) /
+      (length * this.sumXTimesY - XData.sum * YData.sum) /
       Math.sqrt(
-        (length * XDataset.sumSquared - XDataset.sum ** 2) *
-          (length * YDataset.sumSquared - YDataset.sum ** 2)
+        (length * XData.sumSquared - XData.sum ** 2) *
+          (length * YData.sumSquared - YData.sum ** 2)
       )
     return correlation
   }
 
-  calculateAverage(aDataset){
+  calculateAverage(data) {
     let sum = 0
-    let length = aDataset.length
-    aDataset.arrayNumbers.map(n => {sum += n})
-    let average = sum/ length
+    let length = data.length
+    data.arrayNumbers.map(n => {
+      sum += n
+    })
+    let average = sum / length
     return average
   }
 
-  calculateRegression(XDataset) {
-    let length = XDataset.length
+  calculateRegression(dataX, dataY) {
+    // debugger
+    let length = dataX.length
 
-    let b = (this.sumXTimesY - length *this.averageX * this.averageY) / 
-                     (XDataset.sumSquared - length * (this.averageX**2))
-    let a = this.averageY - b * this.averageX
-    let arrayRegression = [a,b]
-    return arrayRegression
+    let b =
+      (this.sumXTimesY - length * dataX.average * dataY.average) /
+      (dataX.sumSquared - length * dataX.average ** 2)
+    let a = dataY.average - b * dataX.average
+    dataX.beta0 = a
+    dataX.beta1 = b
   }
 
   startCalculation() {
     // this.arrayDataset.push([83, 116, 186, 81, 114])
     // this.arrayDataset.push([11.2, 9.3, 21.6, 6.9, 10.2])
 
-    let XDataset = this.arrayDataset[0]
-    let YDataset = this.arrayDataset[1]
+    let dataX = this.arrayData[0]
+    let dataY = this.arrayData[1]
 
     // Calculate sum of numbers
-    XDataset.sum = this.calculateSum(XDataset.arrayNumbers)
-    YDataset.sum = this.calculateSum(YDataset.arrayNumbers)
+    dataX.sum = this.calculateSum(dataX.arrayNumbers)
+    dataY.sum = this.calculateSum(dataY.arrayNumbers)
 
     // Calculate squared numbers
-    XDataset.arrayNumberSquared = this.calculateNumberSquared(
-      XDataset.arrayNumbers
-    )
-    YDataset.arrayNumberSquared = this.calculateNumberSquared(
-      YDataset.arrayNumbers
-    )
+    dataX.arrayNumberSquared = this.calculateNumberSquared(dataX.arrayNumbers)
+    dataY.arrayNumberSquared = this.calculateNumberSquared(dataY.arrayNumbers)
 
     // Calcualte sum of squared number
-    XDataset.sumSquared = this.calculateSum(XDataset.arrayNumberSquared)
-    YDataset.sumSquared = this.calculateSum(YDataset.arrayNumberSquared)
+    dataX.sumSquared = this.calculateSum(dataX.arrayNumberSquared)
+    dataY.sumSquared = this.calculateSum(dataY.arrayNumberSquared)
 
     // Calculate X*Y
-    for (let i = 0; i < XDataset.length; i++) {
-      let xTimesY = XDataset.arrayNumbers[i] * YDataset.arrayNumbers[i]
+    for (let i = 0; i < dataX.length; i++) {
+      let xTimesY = dataX.arrayNumbers[i] * dataY.arrayNumbers[i]
       this.arrayXTimesY.push(xTimesY)
     }
     // Calculate sum of X*Y
     this.sumXTimesY = this.calculateSum(this.arrayXTimesY)
 
-    this.correlation = this.calculateCorrelation(XDataset, YDataset)
+    this.correlation = this.calculateCorrelation(dataX, dataY)
     this.coefficientOfDetermination = this.correlation ** 2
-    console.log("correlation:"+ this.correlation)
-    this.averageX = this.calculateAverage(XDataset)
-    this.averageY = this.calculateAverage(YDataset)
-    this.arrayRegressionX =  this.calculateRegression(XDataset)
-    console.log("X reg: " + this.arrayRegressionX)
-    this.arrayRegressionY =  this.calculateRegression(YDataset)
-    console.log("Y reg: " + this.arrayRegressionY)
+    console.log("correlation:" + this.correlation)
+    dataX.average = this.calculateAverage(dataX)
+    dataY.average = this.calculateAverage(dataY)
+    this.calculateRegression(dataX, dataY)
+    console.log(`X reg:  ${dataX.beta0} , ${dataX.beta1}`)
+    this.calculateRegression(dataY, dataX)
+    // console.log(`Y reg:  ${dataY.beta0} , ${dataY.beta1}`)
   }
   examineRelationship() {}
 }

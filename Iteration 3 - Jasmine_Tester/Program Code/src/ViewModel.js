@@ -82,8 +82,8 @@ let viewModel = new Vue({
     },
     startCalculation: function() {
       {
-        this.arrayNumberFirst = this.calculator.arrayDataset[0].arrayNumbers
-        this.arrayNumberSecond = this.calculator.arrayDataset[1].arrayNumbers
+        this.arrayNumberFirst = this.calculator.arrayData[0].arrayNumbers
+        this.arrayNumberSecond = this.calculator.arrayData[1].arrayNumbers
 
         this.calculator.startCalculation()
         this.updateValues()
@@ -92,26 +92,26 @@ let viewModel = new Vue({
     },
 
     updateValues: function() {
-      let xData = this.calculator.arrayDataset[0]
-      let yData = this.calculator.arrayDataset[1]
+      let xData = this.calculator.arrayData[0]
+      let yData = this.calculator.arrayData[1]
       this.correlation = this.calculator.correlation
       this.coefficientOfDetermination = this.calculator.coefficientOfDetermination
-      this.beta0X = this.calculator.arrayRegressionX[0]
-      this.beta1X = this.calculator.arrayRegressionX[1]
-      this.beta0Y = this.calculator.arrayRegressionY[0]
-      this.beta1Y = this.calculator.arrayRegressionY[1]
+      this.beta0X = xData.beta0
+      this.beta1X = xData.beta1
+      this.beta0Y = yData.beta0
+      this.beta1Y = yData.beta1
       this.sumX = xData.sum
       this.sumY = yData.sum
       this.sumXTimesY =this.calculator.sumXTimesY
       this.sumSquaredX = xData.sumSquared
       this.sumSquaredY = yData.sumSquared
-      this.averageX = this.calculator.averageX
-      this.averageY = this.calculator.averageY
+      this.averageX = xData.average
+      this.averageY = yData.average
     },
     generateArrayTableData: function() {
       let aTable = []
-      let xData = this.calculator.arrayDataset[0]
-      let yData = this.calculator.arrayDataset[1]
+      let xData = this.calculator.arrayData[0]
+      let yData = this.calculator.arrayData[1]
       for(let n=0;n< xData.length;n++){
         let aRow = {
           x : xData.arrayNumbers[n],
