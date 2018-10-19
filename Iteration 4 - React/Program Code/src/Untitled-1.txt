@@ -1,0 +1,69 @@
+    <input id="fileInput" type='file' onChange={this.inputFiles} multiple>
+    <br>
+    <br>
+    <input type="button" onClick={this.setup} value='Reset'>
+    <br>
+    <br>
+    <div>
+      <table border="1px">
+        <tr>
+          <th></th>
+          <th>X</th>
+          <th>Y</th>
+          <th>X*Y</th>
+          <th>X<sup>2</sup></th>
+          <th>Y<sup>2</sup></th>
+        </tr>
+        
+        <tr v-for="(data,index) in arrayTableData">
+          <td>{index+1}</td>
+          <td>{data.x}</td>
+          <td>{data.y}</td>
+          <td>{data.xTimesY}</td>
+          <td>{data.xSquare}</td>
+          <td>{data.ySquare}</td>
+        </tr>
+
+        <tr>
+          <td>Sum</td>
+          <td>{this.state.sumX}</td>
+          <td>{this.state.sumY}</td>
+          <td>{this.state.sumXTimesY}</td>
+          <td>{this.state.sumSquaredX}</td>
+          <td>{this.state.sumSquaredY}</td>
+        </tr>
+        <tr>
+          <td>Average</td>
+          <td>{this.state.averageX}</td>
+          <td>{this.state.averageY}</td>
+        </tr>
+      </table>
+      <br>
+      <table>
+        <tr>
+          <td>Correlation: </td>
+          <td>{this.state.correlation}</td>
+        </tr>
+        <tr>
+          <td>Coefficient of Determination: </td>
+          <td> {this.state.coefficientOfDetermination}</td>
+        </tr>
+        <tr>
+          <td>X &beta;0: </td>
+          <td> {this.state.beta0X}</td>
+        </tr>
+        <tr>
+          <td>X &beta;1: </td>
+          <td> {this.state.beta1X}</td>
+        </tr>
+        <tr>
+          <td>Y &beta;0: </td>
+          <td> {this.state.beta0Y}</td>
+        </tr>
+        <tr>
+          <td>Y &beta;1: </td>
+          <td> {this.state.beta1Y}</td>
+        </tr>
+
+      </table>
+    </div>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Calculator</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="./src/Calculator.js"></script>
+
+</head>
+
+<body>
+  <div id="divCalculator">
+    <input id="fileInput" type='file' @change='inputFiles' multiple>
+    <br>
+    <br>
+    <input type="button" @click="setup" value='Reset'>
+    <br>
+    <br>
+    <div v-if="arrayTableData">
+      <table border="1px">
+        <tr>
+          <th></th>
+          <th>X</th>
+          <th>Y</th>
+          <th>X*Y</th>
+          <th>X<sup>2</sup></th>
+          <th>Y<sup>2</sup></th>
+        </tr>
+        <tr v-for="(data,index) in arrayTableData">
+          <td>{{index+1}}</td>
+          <td>{{data.x}}</td>
+          <td>{{data.y}}</td>
+          <td>{{data.xTimesY}}</td>
+          <td>{{data.xSquare}}</td>
+          <td>{{data.ySquare}}</td>
+        </tr>
+        <tr>
+          <td>Sum</td>
+          <td>{{sumX}}</td>
+          <td>{{sumY}}</td>
+          <td>{{sumXTimesY}}</td>
+          <td>{{sumSquaredX}}</td>
+          <td>{{sumSquaredY}}</td>
+        </tr>
+        <tr>
+          <td>Average</td>
+          <td>{{averageX}}</td>
+          <td>{{averageY}}</td>
+        </tr>
+      </table>
+      <br>
+      <table>
+        <tr>
+          <td>Correlation: </td>
+          <td>{{correlation}}</td>
+        </tr>
+        <tr>
+          <td>Coefficient of Determination: </td>
+          <td> {{coefficientOfDetermination}}</td>
+        </tr>
+        <tr>
+          <td>X &beta;0: </td>
+          <td> {{beta0X}}</td>
+        </tr>
+        <tr>
+          <td>X &beta;1: </td>
+          <td> {{beta1X}}</td>
+        </tr>
+        <tr>
+          <td>Y &beta;0: </td>
+          <td> {{beta0Y}}</td>
+        </tr>
+        <tr>
+          <td>Y &beta;1: </td>
+          <td> {{beta1Y}}</td>
+        </tr>
+
+      </table>
+
+    </div>
+  </div>
+  <script src="src/ViewModel.js"></script>
+  <script>
+    viewModel.setup()
+  </script>
+</body>
+
+</html>

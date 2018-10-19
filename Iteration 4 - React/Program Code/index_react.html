@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Calculator-React.js</title>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="./src/Calculator.js"></script>
+</head>
+
+<script type="text/babel">
+  class ReactViewModel extends React.Component {
+  constructor(props) {
+    super(props)
+    this.setup()
+  }
+
+  setup() {
+    // debugger
+    this.state = {
+      calculator: new Calculator(),
+      arrayNumberFirst: [],
+      arrayNumberSecond: [],
+      correlation: null,
+      coefficientOfDetermination: null,
+      myFileInput: null,
+      sumX: null,
+      sumY: null,
+      sumSquaredX: null,
+      sumSquaredY: null,
+      sumXTimesY: null,
+      beta0X: null,
+      beta1X: null,
+      beta0Y: null,
+      beta1Y: null,
+      averageX: null,
+      averageY: null
+    }
+    this.state.calculator.setup()
+    this.inputFiles = this.inputFiles.bind(this)
+    this.setup = this.setup.bind(this)
+    this.reset = this.reset.bind(this)
+  }
+
+  async inputFiles(event) {
+    this.setup()
+    this.state.myFileInput = event.target
+    let filesInputed = this.state.myFileInput.files
+
+    if (filesInputed.length !== 2) {
+      alert("Please select TWO files")
+      this.setup()
+      return
+    } else {
+      for (let file of filesInputed) {
+        let arrayNumbers = await this.decryptUploadFile(file)
+        this.state.calculator.inputArrayNumbers(arrayNumbers)
+      }
+      if (!this.state.calculator.hasTheSameInputLength()) {
+        alert("Please make sure both files have the same data length")
+        this.setup()
+        return
+      }
+      this.startCalculation()
+    }
+  }
+
+  decryptUploadFile(aFile) {
+    // debugger
+    return new Promise((resolve, reject) => {
+      let fileReader = new FileReader()
+      fileReader.onerror = () => {
+        fileReader.abort()
+        reject(new DOMException("Problem parsing input file."))
+      }
+      fileReader.onload = event => {
+        let arrayNumbers = event.target.result.split("\r\n").map(Number)
+        resolve(arrayNumbers)
+      }
+      fileReader.readAsText(aFile)
+    })
+  }
+
+  startCalculation() {
+    this.state.arrayNumberFirst = this.state.calculator.arrayData[0].arrayNumbers
+    this.state.arrayNumberSecond = this.state.calculator.arrayData[1].arrayNumbers
+
+    this.state.calculator.startCalculation()
+    this.updateValues()
+  }
+
+  updateValues() {
+    let xData = this.state.calculator.arrayData[0]
+    let yData = this.state.calculator.arrayData[1]
+    // debugger
+    this.setState({
+      calculator: this.state.calculator,
+      arrayNumberFirst: this.state.arrayNumberFirst,
+      arrayNumberSecond: this.state.arrayNumberSecond,
+      correlation: this.state.calculator.correlation,
+      coefficientOfDetermination: this.state.calculator
+        .coefficientOfDetermination,
+      myFileInput: this.state.myFileInput,
+      sumX: xData.sum,
+      sumY: yData.sum,
+      sumSquaredX: xData.sumSquared,
+      sumSquaredY: yData.sumSquared,
+      sumXTimesY: this.state.calculator.sumXTimesY,
+      beta0X: xData.beta0,
+      beta1X: xData.beta1,
+      beta0Y: yData.beta0,
+      beta1Y: yData.beta1,
+      averageX: xData.average,
+      averageY: yData.average
+    })
+    // console.log(this.state)
+  }
+
+  reset() {
+    const emptyState = null
+    // this.setState(emptyState)
+    this.state = {}
+    console.log(this.state)
+    this.setup()
+    // this.forceUpdate()
+    this.render()
+    // debugger
+  }
+
+  render() {
+    /*<input type="button" onClick={this.reset} value="Reset" />
+    <br/>
+    <br/>*/
+    return (
+      <div>
+        <input id="fileInput" type="file" onChange={this.inputFiles} multiple />
+      
+        <br/>
+        <br/>
+        <CalculationResult viewModel={this} />
+      </div>
+    )
+  }
+}
+
+class CalculationResult extends React.Component {
+  constructor(props) {
+    super(props)
+    //  console.log(props)
+  }
+  generateResult() {
+    let viewModel = this.props.viewModel
+    // console.log(viewModel)
+    let calculator = viewModel.state.calculator
+    //  debugger
+    if (viewModel.state.myFileInput) {
+      return (
+        <div>
+        <table border="1px">
+          <thead>
+            <tr>
+              <th />
+              <th>X</th>
+              <th>Y</th>
+              <th>X*Y</th>
+              <th>
+                X<sup>2</sup>
+              </th>
+              <th>
+                Y<sup>2</sup>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <InputDataTable viewModel={viewModel} />
+            </tbody>
+          </table>
+          <br/>
+        <SummaryTable viewModel={viewModel}/>
+        </div>
+      )
+    } else return <div></div>
+  }
+
+  render() {
+    return this.generateResult()
+  }
+}
+
+class InputDataTable extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  createTable() {
+    {
+      let aTable = []
+      let viewModel = this.props.viewModel
+      let calculator = viewModel.state.calculator
+      // console.log(calculator)
+      if (viewModel.state.myFileInput) {
+        // console.log(this)
+        let xData = calculator.arrayData[0]
+        let yData = calculator.arrayData[1]
+        let arrayXTimesY = calculator.arrayXTimesY
+        for (let n = 0; n < xData.length; n++) {
+          // debugger
+          let aRow = (
+            <tr key={n}>
+              <td>{n + 1}</td>
+              <td>{xData.arrayNumbers[n]}</td>
+              <td>{yData.arrayNumbers[n]}</td>
+              <td>{arrayXTimesY[n]}</td>
+              <td>{xData.arrayNumberSquared[n]}</td>
+              <td>{yData.arrayNumberSquared[n]}</td>
+            </tr>
+          )
+          aTable.push(aRow)
+        }
+        aTable.push(
+            <tr key={aTable.length}>
+              <td>Sum</td>
+              <td>{viewModel.state.sumX}</td>
+              <td>{viewModel.state.sumY}</td>
+              <td>{viewModel.state.sumXTimesY}</td>
+              <td>{viewModel.state.sumSquaredX}</td>
+              <td>{viewModel.state.sumSquaredY}</td>
+            </tr>
+          )
+        aTable.push(
+            <tr key={aTable.length}>
+              <td>Average</td>
+              <td>{viewModel.state.averageX}</td>
+              <td>{viewModel.state.averageY}</td>
+            </tr>
+        )
+      }
+      return aTable
+    }
+  }
+
+  render() {
+    return this.createTable()
+  }
+}
+
+class SummaryTable extends React.Component{
+  constructor(props){
+    super(props)
+  }
+  createSummaryTable(){
+    let viewModel = this.props.viewModel
+    let result = {
+      correlation: viewModel.state.correlation,
+      coefficientOfDetermination: viewModel.state.coefficientOfDetermination,
+      beta0X: viewModel.state.beta0X,
+      beta1X: viewModel.state.beta1X,
+      beta0Y: viewModel.state.beta0Y,
+      beta1Y: viewModel.state.beta1Y
+    }
+    return(
+      <table border="1px">
+        <tbody>
+            <tr>
+              <td>Correlation:</td>
+              <td>{result.correlation}</td>
+            </tr>
+            <tr>
+              <td>Coefficient of Determination:</td>
+              <td>{result.coefficientOfDetermination}</td>
+            </tr>
+            <tr>
+              <td>X&beta;0:</td>
+              <td>{result.beta0X}</td>
+          </tr>
+          <tr>
+              <td>X&beta;1:</td>
+              <td>{result.beta1X}</td>
+          </tr>
+          <tr>
+              <td>Y&beta;0:</td>
+              <td>{result.beta0Y}</td>
+          </tr>
+          <tr>
+              <td>Y&beta;1:</td>
+              <td>{result.beta1Y}</td>
+          </tr>
+        </tbody>
+      </table>
+  )}
+  render() {return this.createSummaryTable()}
+}
+
+</script>
+
+<body>
+  <div id="divCalculator"></div>
+  <script type="text/babel">
+    const element = <ReactViewModel/>
+    ReactDOM.render(
+    element,
+    document.getElementById('divCalculator')
+    )  
+  </script>
+</body>
+
+</html>
