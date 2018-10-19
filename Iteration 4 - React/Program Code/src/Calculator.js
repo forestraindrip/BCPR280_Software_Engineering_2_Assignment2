@@ -59,7 +59,8 @@ class Calculator {
         (length * XData.sumSquared - XData.sum ** 2) *
           (length * YData.sumSquared - YData.sum ** 2)
       )
-    return correlation
+    
+    return this.floorNumber(correlation, 5)
   }
 
   calculateAverage(data) {
@@ -69,7 +70,7 @@ class Calculator {
       sum += n
     })
     let average = sum / length
-    return average
+    return this.floorNumber(average, 5)
   }
 
   calculateRegression(dataX, dataY) {
@@ -80,8 +81,8 @@ class Calculator {
       (this.sumXTimesY - length * dataX.average * dataY.average) /
       (dataX.sumSquared - length * dataX.average ** 2)
     let a = dataY.average - b * dataX.average
-    dataX.beta0 = a
-    dataX.beta1 = b
+    dataX.beta0 = this.floorNumber(a, 5)
+    dataX.beta1 = this.floorNumber(b, 5)
   }
 
   startCalculation() {
@@ -112,7 +113,7 @@ class Calculator {
     this.sumXTimesY = this.calculateSum(this.arrayXTimesY)
 
     this.correlation = this.calculateCorrelation(dataX, dataY)
-    this.coefficientOfDetermination = this.correlation ** 2
+    this.coefficientOfDetermination = this.floorNumber(this.correlation ** 2,5)
     // console.log("correlation:" + this.correlation)
     dataX.average = this.calculateAverage(dataX)
     dataY.average = this.calculateAverage(dataY)
@@ -121,5 +122,8 @@ class Calculator {
     this.calculateRegression(dataY, dataX)
     // console.log(`Y reg:  ${dataY.beta0} , ${dataY.beta1}`)
   }
-  examineRelationship() {}
+  // examineRelationship() {}
+  floorNumber(anNumber, digit) {
+    return Math.floor(anNumber * 10 ** digit) / 10 ** digit
+  }
 }
