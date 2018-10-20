@@ -13,7 +13,7 @@
     <input id="fileInput" type='file' @change='inputFiles' multiple>
     <br>
     <br>
-    <input type="button" @click="setup" value='Reset'>
+    <!-- <input type="button" @click="setup" value='Reset'> -->
     <br>
     <br>
     <div v-if="arrayTableData">
@@ -49,7 +49,7 @@
         </tr>
       </table>
       <br>
-      <table>
+      <table border="1px">
         <tr>
           <td>Correlation: </td>
           <td>{{correlation}}</td>
@@ -74,12 +74,10 @@
           <td>Y &beta;1: </td>
           <td> {{beta1Y}}</td>
         </tr>
-
       </table>
-
     </div>
   </div>
-  <script src="src/ViewModel.js"></script>
+  <script src="src/vueViewModel.js"></script>
   <script>
     viewModel.setup()
   </script>

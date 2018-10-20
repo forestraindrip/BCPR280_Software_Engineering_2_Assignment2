@@ -116,7 +116,7 @@ describe("Calculator", function() {
         let anInput = anArrayInput[i]
 
         anInput.map(num => (sum += num))
-        let answer = sum / anInput.length
+        let answer = floorNumber(sum / anInput.length,5)
 
         let data = {
           arrayNumbers: anInput,
@@ -132,7 +132,7 @@ describe("Calculator", function() {
     })
   })
 
-  describe("calculator.startCalculation（）", function() {
+  describe("calculator.startCalculation()", function() {
     let arrayX = [130, 650, 99, 150, 128, 302, 95, 945, 368, 961]
     let arrayY = [186, 699, 132, 272, 291, 331, 199, 1890, 788, 1601]
 

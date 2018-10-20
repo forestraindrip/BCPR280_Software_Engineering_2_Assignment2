@@ -18,7 +18,6 @@ class Calculator {
   inputArrayNumbers(arrayNumbers) {
     let data = {
       arrayNumbers: arrayNumbers,
-      // console.log( this.arrayNumbers)
       arrayNumberSquared: [],
       length: arrayNumbers.length,
       sum: null,
@@ -45,9 +44,9 @@ class Calculator {
 
   calculateNumberSquared(anArrayNumbers) {
     let arrayNumberSquared = anArrayNumbers.map(n => {
-      return n * n
+      return this.floorNumber(n*n,5)
     })
-    return arrayNumberSquared
+    return  arrayNumberSquared
   }
 
   calculateCorrelation(XData, YData) {
@@ -59,7 +58,8 @@ class Calculator {
         (length * XData.sumSquared - XData.sum ** 2) *
           (length * YData.sumSquared - YData.sum ** 2)
       )
-    return correlation
+    
+    return this.floorNumber(correlation, 5)
   }
 
   calculateAverage(data) {
@@ -69,24 +69,23 @@ class Calculator {
       sum += n
     })
     let average = sum / length
-    return average
+    return this.floorNumber(average, 5)
   }
 
   calculateRegression(dataX, dataY) {
-    // debugger
     let length = dataX.length
 
     let b =
       (this.sumXTimesY - length * dataX.average * dataY.average) /
       (dataX.sumSquared - length * dataX.average ** 2)
     let a = dataY.average - b * dataX.average
-    dataX.beta0 = a
-    dataX.beta1 = b
+    dataX.beta0 = this.floorNumber(a, 5)
+    dataX.beta1 = this.floorNumber(b, 5)
   }
 
   startCalculation() {
-    // this.arrayDataset.push([83, 116, 186, 81, 114])
-    // this.arrayDataset.push([11.2, 9.3, 21.6, 6.9, 10.2])
+    // this.arrayData.push([83, 116, 186, 81, 114])
+    // this.arrayData.push([11.2, 9.3, 21.6, 6.9, 10.2])
 
     let dataX = this.arrayData[0]
     let dataY = this.arrayData[1]
@@ -106,20 +105,24 @@ class Calculator {
     // Calculate X*Y
     for (let i = 0; i < dataX.length; i++) {
       let xTimesY = dataX.arrayNumbers[i] * dataY.arrayNumbers[i]
+      xTimesY = this.floorNumber(xTimesY,5)
       this.arrayXTimesY.push(xTimesY)
     }
     // Calculate sum of X*Y
-    this.sumXTimesY = this.calculateSum(this.arrayXTimesY)
+    this.sumXTimesY = this.floorNumber( this.calculateSum(this.arrayXTimesY),5)
 
     this.correlation = this.calculateCorrelation(dataX, dataY)
-    this.coefficientOfDetermination = this.correlation ** 2
-    console.log("correlation:" + this.correlation)
+    this.coefficientOfDetermination = this.floorNumber(this.correlation ** 2,5)
+    // console.log("correlation:" + this.correlation)
     dataX.average = this.calculateAverage(dataX)
     dataY.average = this.calculateAverage(dataY)
     this.calculateRegression(dataX, dataY)
-    console.log(`X reg:  ${dataX.beta0} , ${dataX.beta1}`)
+    // console.log(`X reg:  ${dataX.beta0} , ${dataX.beta1}`)
     this.calculateRegression(dataY, dataX)
     // console.log(`Y reg:  ${dataY.beta0} , ${dataY.beta1}`)
   }
-  examineRelationship() {}
+  // examineRelationship() {}
+  floorNumber(anNumber, digit) {
+    return Math.floor(anNumber * 10 ** digit) / 10 ** digit
+  }
 }

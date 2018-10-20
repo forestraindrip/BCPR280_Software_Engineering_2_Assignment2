@@ -4,8 +4,8 @@ let viewModel = new Vue({
     calculator: Calculator,
     arrayNumberFirst: [],
     arrayNumberSecond: [],
-    correlation: 0,
-    coefficientOfDetermination: 0,
+    correlation: null,
+    coefficientOfDetermination: null,
     myFileInput: null,
     sumX: null,
     sumY: null,
@@ -26,33 +26,31 @@ let viewModel = new Vue({
       this.calculator.setup()
       this.arrayNumberFirst = []
       this.arrayNumberSecond = []
-      this.correlation = 0
-      this.coefficientOfDetermination = 0
-      if (this.myFileInput) this.myFileInput.value = ""
+      this.correlation = null
+      this.coefficientOfDetermination = null
       this.myFileInput = null
       this.sumX = null
       this.sumY = null
-      this.sumSquaredX= null
-      this.sumSquaredY= null
-      this.sumXTimesY= null
-      this.beta0X= null
-      this.beta1X= null
-      this.beta0Y= null
-      this.beta1Y= null
-      this.averageX= null
+      this.sumSquaredX = null
+      this.sumSquaredY = null
+      this.sumXTimesY = null
+      this.beta0X = null
+      this.beta1X = null
+      this.beta0Y = null
+      this.beta1Y = null
+      this.averageX = null
       this.averageY = null
       this.arrayTableData = null
     },
     inputFiles: async function(event) {
-      this.setup()
       this.myFileInput = event.target
       let filesInputed = this.myFileInput.files
 
-      if (filesInputed.length !== 2) {
+    if (filesInputed.length !== 2) {
         alert("Please select TWO files")
-        this.setup()
         return
       } else {
+        this.setup()
         for (let file of filesInputed) {
           let arrayNumbers = await this.decryptUploadFile(file)
           this.calculator.inputArrayNumbers(arrayNumbers)
@@ -102,7 +100,7 @@ let viewModel = new Vue({
       this.beta1Y = yData.beta1
       this.sumX = xData.sum
       this.sumY = yData.sum
-      this.sumXTimesY =this.calculator.sumXTimesY
+      this.sumXTimesY = this.calculator.sumXTimesY
       this.sumSquaredX = xData.sumSquared
       this.sumSquaredY = yData.sumSquared
       this.averageX = xData.average
@@ -112,11 +110,11 @@ let viewModel = new Vue({
       let aTable = []
       let xData = this.calculator.arrayData[0]
       let yData = this.calculator.arrayData[1]
-      for(let n=0;n< xData.length;n++){
+      for (let n = 0; n < xData.length; n++) {
         let aRow = {
-          x : xData.arrayNumbers[n],
-          y : yData.arrayNumbers[n],
-          xSquare : xData.arrayNumberSquared[n],
+          x: xData.arrayNumbers[n],
+          y: yData.arrayNumbers[n],
+          xSquare: xData.arrayNumberSquared[n],
           ySquare: yData.arrayNumberSquared[n],
           xTimesY: this.calculator.arrayXTimesY[n]
         }
