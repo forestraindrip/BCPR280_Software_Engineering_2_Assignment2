@@ -47,11 +47,12 @@
   async inputFiles(event) {
     this.setup()
     this.state.myFileInput = event.target
+    console.log(this.state.myFileInput)
     let filesInputed = this.state.myFileInput.files
 
     if (filesInputed.length !== 2) {
       alert("Please select TWO files")
-      this.setup()
+      this.state.myFileInput = null
       return
     } else {
       for (let file of filesInputed) {
