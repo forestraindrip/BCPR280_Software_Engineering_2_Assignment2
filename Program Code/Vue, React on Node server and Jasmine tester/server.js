@@ -10,11 +10,7 @@ let port = 8000
 const server = createServer((request, response) => {
   // console.log(request.url)
 
-  // Get the extension
-  let indexStart = request.url.indexOf(".")
-  let extension = request.url.slice(indexStart)
-
-  // Determine URL address
+  // Determine path
   let path = request.url === "/" ? "./index_vue.html" : `.${request.url}`
   console.log(`Asking for '${path}'`)
 
@@ -23,16 +19,17 @@ const server = createServer((request, response) => {
     if (error) {
       throw error
     }
-     // Write the type of extension to header
+    // Get the extension
+    let extension = getExtension(request.url)
+    // Write the type of the extension to the response header
     /* Reference: https://gist.github.com/rickdaalhuizen90/d64eb7b1ad44e4613066e9cb9e9708fe */
-   
     response.writeHeader(200, {
       "Content-Type": getMimeType(extension)
     })
 
     // Response data
     response.write(data)
-    // End response 
+    // End the response
     response.end()
   })
 })
@@ -40,6 +37,12 @@ const server = createServer((request, response) => {
 server.listen(port, hostname, () => {
   console.log(`The server is running at http://${hostname}:${port}/`)
 })
+function getExtension(anURL){
+  let indexStart = anURL.indexOf(".")
+  let extension = anURL.slice(indexStart)
+  return extension
+}
+
 
 function getMimeType(url) {
   switch (url) {
@@ -75,4 +78,3 @@ function getMimeType(url) {
       return "text/html"
   }
 }
-

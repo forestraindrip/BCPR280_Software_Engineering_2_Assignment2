@@ -55,7 +55,7 @@ let viewModel = new Vue({
       } else {
         // initialise values in this viewmodel
         this.setup()
-        // input each file
+        // porcess each file
         for (let file of filesInputed) {
           // decrypt data in input file to an array of numbers
           let arrayNumbers = await this.decryptUploadFile(file)

@@ -104,11 +104,16 @@
     // Calculate sum of X*Y
     this.sumXTimesY = this.floorNumber( this.calculateSum(this.arrayXTimesY),5)
 
+    // Calculate correlation
     this.correlation = this.calculateCorrelation(dataX, dataY)
+    // Calculate coefficient of determination
     this.coefficientOfDetermination = this.floorNumber(this.correlation ** 2,5)
     // console.log("correlation:" + this.correlation)
+
+    // calculate average
     dataX.average = this.calculateAverage(dataX)
     dataY.average = this.calculateAverage(dataY)
+    // calculate regression
     this.calculateRegression(dataX, dataY)
     // console.log(`X reg:  ${dataX.beta0} , ${dataX.beta1}`)
     this.calculateRegression(dataY, dataX)
