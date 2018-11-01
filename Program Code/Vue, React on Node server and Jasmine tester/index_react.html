@@ -3,14 +3,19 @@
 
 <head>
   <title>Calculator-React.js</title>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
   <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
   <script src="./src/Calculator.js"></script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
 </head>
 
-<script type="text/babel">
+<body>
+
+
+  <script type="text/babel">
   class ReactViewModel extends React.Component {
   constructor(props) {
     super(props)
@@ -47,12 +52,12 @@
   async inputFiles(event) {
     this.setup()
     this.state.myFileInput = event.target
-    console.log(this.state.myFileInput)
+    // console.log(this.state.myFileInput)
     let filesInputed = this.state.myFileInput.files
 
     if (filesInputed.length !== 2) {
       alert("Please select TWO files")
-      this.state.myFileInput = null
+      this.state.myFileInput.files = null
       return
     } else {
       for (let file of filesInputed) {
@@ -130,16 +135,34 @@
     // debugger
   }
 
+  switchViewmodel() {
+      let value = event.target.value
+      console.log(value)
+      switch (value) {
+        case 'vue.js':
+          window.location='index_vue.html'
+          break
+        case 'react.js':
+          window.location='index_react.html'
+          break
+        default:
+          break
+      }
+    }
+
   render() {
-    /*<input type="button" onClick={this.reset} value="Reset" />
-    <br/>
-    <br/>*/
     return (
-      <div>
-        <input id="fileInput" type="file" onChange={this.inputFiles} multiple />
-      
-        <br/>
-        <br/>
+      <div className='m-2'>
+          <nav className="navbar ">
+            <ul className="nav navbar-nav flex-row">
+              <li><button className="btn mx-2 my-1" value="vue.js" onClick={this.switchViewmodel}>Vue</button></li>
+              <li><button className="btn mx-2 my-1 " value="react.js" onClick={this.switchViewmodel}>React</button></li>
+            </ul>
+          </nav>
+        <form className="form-group">
+          <label htmlFor="fileInput">Please input two files</label>
+          <input id="fileInput" type="file" className="form-control-file" onChange={this.inputFiles} multiple />
+        </form>
         <CalculationResult viewModel={this} />
       </div>
     )
@@ -159,10 +182,10 @@ class CalculationResult extends React.Component {
     if (viewModel.state.myFileInput) {
       return (
         <div>
-        <table border="1px">
+         <table className="table-bordered table-hover">
           <thead>
             <tr>
-              <th />
+              <th/>
               <th>X</th>
               <th>Y</th>
               <th>X*Y</th>
@@ -261,31 +284,31 @@ class SummaryTable extends React.Component{
       beta1Y: viewModel.state.beta1Y
     }
     return(
-      <table border="1px">
+      <table className="table-bordered table-hover">
         <tbody>
-            <tr>
-              <td>Correlation:</td>
-              <td>{result.correlation}</td>
-            </tr>
-            <tr>
-              <td>Coefficient of Determination:</td>
-              <td>{result.coefficientOfDetermination}</td>
-            </tr>
-            <tr>
-              <td>X &beta;0:</td>
-              <td>{result.beta0X}</td>
+          <tr>
+            <td>Correlation:</td>
+            <td>{result.correlation}</td>
           </tr>
           <tr>
-              <td>X &beta;1:</td>
-              <td>{result.beta1X}</td>
+            <td>Coefficient of Determination:</td>
+            <td>{result.coefficientOfDetermination}</td>
           </tr>
           <tr>
-              <td>Y &beta;0:</td>
-              <td>{result.beta0Y}</td>
+            <td>X &beta;0:</td>
+            <td>{result.beta0X}</td>
           </tr>
           <tr>
-              <td>Y &beta;1:</td>
-              <td>{result.beta1Y}</td>
+            <td>X &beta;1:</td>
+            <td>{result.beta1X}</td>
+          </tr>
+          <tr>
+            <td>Y &beta;0:</td>
+            <td>{result.beta0Y}</td>
+          </tr>
+          <tr>
+            <td>Y &beta;1:</td>
+            <td>{result.beta1Y}</td>
           </tr>
         </tbody>
       </table>
@@ -294,16 +317,17 @@ class SummaryTable extends React.Component{
 }
 
 </script>
-
-<body>
-  <div id="divCalculator"></div>
+  <div id="divCalculatorReact"></div>
   <script type="text/babel">
     const element = <ReactViewModel/>
     ReactDOM.render(
     element,
-    document.getElementById('divCalculator')
-    )  
-  </script>
+    document.getElementById('divCalculatorReact')
+    ) 
+    
+</script>
+
+
 </body>
 
 </html>

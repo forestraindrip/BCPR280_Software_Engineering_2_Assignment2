@@ -1,10 +1,6 @@
 class Calculator {
   constructor() {
-    this.arrayData = []
-    this.arrayXTimesY = []
-    this.sumXTimesY = 0
-    this.correlation = 0 //r
-    this.coefficientOfDetermination = 0 // r*r
+    this.setup()
   }
 
   setup() {
@@ -126,3 +122,5 @@ class Calculator {
     return Math.floor(anNumber * 10 ** digit) / 10 ** digit
   }
 }
+
+module.exports = Calculator

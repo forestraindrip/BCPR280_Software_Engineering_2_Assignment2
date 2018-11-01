@@ -6,18 +6,26 @@
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="./src/Calculator.js"></script>
 
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
 </head>
 
 <body>
-  <div id="divCalculator">
-    <input id="fileInput" type='file' @change='inputFiles' multiple>
-    <br>
-    <br>
-    <!-- <input type="button" @click="setup" value='Reset'> -->
-    <br>
-    <br>
+  <div id="divCalculatorVue" class="m-2">
+    <nav class="navbar ">
+      <ul class="nav navbar-nav flex-row">
+        <li><button class="btn mx-2 my-1" value="vue.js" @click="switchViewmodel">Vue</button></li>
+        <li><button class="btn mx-2 my-1 " value="react.js" @click="switchViewmodel">React</button></li>
+      </ul>
+    </nav>
+    <form class="form-group">
+      <label for="fileInput">Please input two files</label>
+      <input id="fileInput" type='file' class="form-control-file" @change='inputFiles' multiple>
+    </form>
+
     <div v-if="arrayTableData">
-      <table border="1px">
+      <table class="table-bordered table-hover">
         <tr>
           <th></th>
           <th>X</th>
@@ -49,7 +57,7 @@
         </tr>
       </table>
       <br>
-      <table border="1px">
+      <table class="table-bordered table-hover">
         <tr>
           <td>Correlation: </td>
           <td>{{correlation}}</td>
@@ -77,10 +85,13 @@
       </table>
     </div>
   </div>
+
+
   <script src="src/vueViewModel.js"></script>
   <script>
     viewModel.setup()
   </script>
+
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 let viewModel = new Vue({
-  el: "#divCalculator",
+  el: "#divCalculatorVue",
   data: {
     calculator: Calculator,
     arrayNumberFirst: [],
@@ -43,23 +43,34 @@ let viewModel = new Vue({
       this.arrayTableData = null
     },
     inputFiles: async function(event) {
+      // Get the input files
       this.myFileInput = event.target
       let filesInputed = this.myFileInput.files
 
-    if (filesInputed.length !== 2) {
+      // Check whether there are 2 files
+      if (filesInputed.length !== 2) {
         alert("Please select TWO files")
+        this.myFileInput = null
         return
       } else {
+        // initialise values in this viewmodel
         this.setup()
+        // input each file
         for (let file of filesInputed) {
+          // decrypt data in input file to an array of numbers
           let arrayNumbers = await this.decryptUploadFile(file)
+          // Insert the array of numbers to the Calculator
           this.calculator.inputArrayNumbers(arrayNumbers)
         }
+        // Check wether the two input arrays are the same length
         if (!this.calculator.hasTheSameInputLength()) {
+          // Show an alert
           alert("Please make sure both files have the same data length")
+          // Reset values in this viewmodel
           this.setup()
           return
         }
+        // Start calculation of input data
         this.startCalculation()
       }
     },
@@ -122,6 +133,20 @@ let viewModel = new Vue({
       }
 
       this.arrayTableData = aTable
+    },
+    switchViewmodel: function() {
+      let value = event.target.value
+      console.log(value)
+      switch (value) {
+        case "vue.js":
+          window.location = "index_vue.html"
+          break
+        case "react.js":
+          window.location = "index_react.html"
+          break
+        default:
+          break
+      }
     }
   }
 })
